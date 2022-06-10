@@ -10,5 +10,7 @@ extern String _password;
 extern String _ssidAP;
 extern String _passwordAP;
 extern String SSDP_Name;
+extern int timezone;
+extern String jsonConfig;
 
 #endif // MAIN_H

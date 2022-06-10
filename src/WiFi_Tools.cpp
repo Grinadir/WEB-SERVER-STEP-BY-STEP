@@ -23,7 +23,7 @@ void WIFIinit() {
     WiFi.begin(_ssid.c_str(), _password.c_str());
     while (--tries&&WiFi.status()!=WL_CONNECTED)
     {
-        Serial.println(".");
+        Serial.print(".");
         delay(500);
     }
     if (WiFi.status()!=WL_CONNECTED){
@@ -34,7 +34,7 @@ void WIFIinit() {
     else{
         Serial.println("");
         Serial.println("WiFI connected");
-        Serial.println("IP address: ");
+        Serial.print("IP address: https://");
         Serial.println(WiFi.localIP());
     }
 

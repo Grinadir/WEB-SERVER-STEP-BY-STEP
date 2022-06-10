@@ -1,42 +1,82 @@
 #include <WebServer.h>
 #include <main.h>
+#include <FileConfig.h>
 
-
-void handleNotFound()
+void handle_ConfigJson()
 {
-    String message = "File Not Found\n\n";
-    message += "URI: ";
-    message += HTTP.uri();
-    message += "\nMethod: ";
-    message += (HTTP.method() == HTTP_GET) ? "GET" : "POST";
-    message += "\nArguments";
-    message += HTTP.args();
-    message += "\n";
-    for (uint8_t i = 0; i < HTTP.args(); i++)
-    {
-        message += " " + HTTP.argName(i) + ": " + HTTP.arg(i) + "\n";
-    }
-    HTTP.send(404, "text/plain", message);
+    String json = "{";
+    json += "\"SSDP\":\"";
+    json += SSDP_Name;
+    // Имя сети
+    json += "\",\"ssid\":\"";
+    json += _ssid;
+    // Пароль сети
+    json += "\",\"password\":\"";
+    json += _password;
+    // Имя точки доступа
+    json += "\",\"ssidAP\":\"";
+    json += _ssidAP;
+    // Пароль точки доступа
+    json += "\",\"passwordAP\":\"";
+    json += _passwordAP;
+    // Времянная зона
+    json += "\",\"timezone\":\"";
+    json += timezone;
+    // IP устройства
+    json += "\",\"ip\":\"";
+    json += WiFi.localIP().toString();
+    json += "\"}";
+    HTTP.send(200, "text/json", json);
 }
 
-void handleRoot(){
-    HTTP.send(200, "text/plain", "hell from esp8266");
-}
-
-
-void handleRestart(){
-    String restart=HTTP.arg("device");
-    if(restart=="ok") ESP.restart();
+void handle_Set_Ssdp()
+{
+    SSDP_Name = HTTP.arg("ssdp");
+    saveConfig();
     HTTP.send(200, "text/plain", "OK");
+}
 
+void handle_Set_Ssid()
+{
+    _ssid = HTTP.arg("ssid");
+    _password = HTTP.arg("password");
+    saveConfig();
+    HTTP.send(200, "text/plain", "OK");
+}
+
+void handle_Set_Ssidap()
+{
+    _ssidAP = HTTP.arg("ssidAP");
+    _passwordAP = HTTP.arg("passwordAP");
+    saveConfig();
+    HTTP.send(200, "text/plain", "OK");
+}
+
+void handle_time_zone()
+{
+
+    timezone = HTTP.arg("timezone").toInt();
+    saveConfig();
+    HTTP.send(200, "text/plain", "OK");
+}
+
+void handleRestart()
+{
+    String restart = HTTP.arg("device");
+    if (restart == "ok")
+        ESP.restart();
+    HTTP.send(200, "text/plain", "OK");
 }
 
 void HTTP_init(void)
 {
-    HTTP.onNotFound(handleNotFound);
-    HTTP.on("/", handleRoot);
+
+    HTTP.on("/configs.json", handle_ConfigJson);
+    HTTP.on("/ssdp", handle_Set_Ssdp);
+    HTTP.on("/TimeZone", handle_time_zone);
+    HTTP.on("/ssid", handle_Set_Ssid);
+    HTTP.on("/ssidap", handle_Set_Ssidap);
     HTTP.on("/restart", handleRestart);
 
     HTTP.begin();
 }
-
