@@ -10,8 +10,8 @@
 ESP8266WebServer HTTP(80);
 IPAddress apIP(192, 168, 4, 1);
 
-String _ssid ="SAURES_R123223";
-String _password="14002661401";
+String _ssid ="MGTS_GPON_1E14";  //SAURES_R1
+String _password="yWbP7Ckp"; //1400266140
 String _ssidAP="ESP8266_testing";
 String _passwordAP="";
 String SSDP_Name="SSDP-test";

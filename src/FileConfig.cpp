@@ -3,6 +3,7 @@
 #include <main.h>
 #include <ArduinoJson.h>
 #include <FileConfig.h>
+#include <WebServer.h>
 
 
 bool saveConfig(){
@@ -17,6 +18,9 @@ bool saveConfig(){
   json["ssidName"] = _ssid;
   json["ssidPassword"] = _password;
   json["timezone"] = timezone;
+  json["ip"]=WiFi.localIP().toString();
+  json["time"]=GetTime();
+  json["date"]=GetDate();
   // Помещаем созданный json в глобальную переменную json.printTo(jsonConfig);
   json.printTo(jsonConfig);
   // Открываем файл для записи

@@ -5,6 +5,8 @@
 #include <ESP8266WebServer.h>
 
 void HTTP_init(void);
+String GetTime();
+String GetDate();
 
 
 #endif // WEBSERVER_H

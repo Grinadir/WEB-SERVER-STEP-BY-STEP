@@ -19,7 +19,7 @@ bool StartAPMode()
 
 void WIFIinit() {
     WiFi.mode(WIFI_STA);
-    byte tries=11;
+    byte tries=20;
     WiFi.begin(_ssid.c_str(), _password.c_str());
     while (--tries&&WiFi.status()!=WL_CONNECTED)
     {
